@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Comical Adventure</title>
+  <style>
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Comic Sans MS", "Comic Sans", cursive;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      overflow: hidden;
+    }
+
+    #gameContainer {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    #titleScreen {
+      position: absolute;
+      top: 15%;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      color: #fff;
+      text-shadow: 2px 2px #333;
+      z-index: 999;
+      max-width: 700px;
+      padding: 1rem;
+    }
+
+    #titleScreen h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    #titleScreen p {
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+      line-height: 1.5;
+    }
+
+    #titleScreen button {
+      background-color: #ff5252;
+      color: #fff;
+      border: none;
+      padding: 1rem 2rem;
+      font-size: 1.2rem;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: transform 0.2s ease;
+    }
+
+    #titleScreen button:hover {
+      transform: scale(1.05);
+      background-color: #c70039;
+    }
+
+    #hud {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.6);
+      color: #000;
+      padding: 0.5rem;
+      text-align: center;
+      z-index: 998;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+
+    #hud div {
+      font-size: 1rem;
+    }
+
+    #player {
+      display: none;
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background: #fff;
+      border: 3px solid #ff5252;
+      border-radius: 50%;
+      color: #ff5252;
+      text-align: center;
+      line-height: 46px;
+      font-size: 1.4rem;
+      font-weight: bold;
+      user-select: none;
+      cursor: default;
+      z-index: 500;
+      transition: transform 0.1s linear;
+    }
+
+    .cookie {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      background: #ffb74d;
+      border: 2px solid #ff9800;
+      border-radius: 50%;
+      box-shadow: 0 0 5px rgba(255, 152, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      cursor: pointer;
+      animation: bob 2s infinite alternate ease-in-out;
+    }
+
+    @keyframes bob {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-20px); }
+    }
+
+    .message {
+      position: absolute;
+      padding: 0.8rem;
+      background-color: rgba(255, 255, 255, 0.9);
+      color: #000;
+      border: 2px solid #ff5252;
+      border-radius: 8px;
+      font-size: 1rem;
+      max-width: 220px;
+      pointer-events: none;
+      animation: vanish 3s forwards ease-in-out;
+      text-align: center;
+    }
+
+    @keyframes vanish {
+      0% { opacity: 1; }
+      80% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    #miniMap {
+      position: absolute;
+      bottom: 1rem;
+      right: 1rem;
+      width: 150px;
+      height: 150px;
+      background: rgba(255, 255, 255, 0.7);
+      border: 2px solid #333;
+      z-index: 700;
+      overflow: hidden;
+      text-align: center;
+      font-size: 0.8rem;
+      display: none;
+    }
+
+    #miniMap h3 {
+      background: #ff5252;
+      color: #fff;
+      margin: 0;
+      padding: 0.2rem;
+    }
+
+    #miniMapCanvas {
+      position: relative;
+      width: 100%;
+      height: calc(100% - 1.2rem);
+      background: #eee;
+    }
+
+    .crazyMode {
+      animation: colorCycler 2s linear infinite alternate;
+    }
+
+    @keyframes colorCycler {
+      0% { background: linear-gradient(135deg, #ff9a9e, #fad0c4); }
+      25% { background: linear-gradient(135deg, #6a11cb, #2575fc); }
+      50% { background: linear-gradient(135deg, #00c6fb, #005bea); }
+      75% { background: linear-gradient(135deg, #fffcdc, #d9a7c7); }
+      100% { background: linear-gradient(135deg, #fbc2eb, #a6c1ee); }
+    }
+
+    #legalNote {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      background: rgba(0,0,0,0.4);
+      color: #fff;
+      padding: 0.5rem;
+      text-align: center;
+      font-size: 0.9rem;
+      z-index: 999;
+    }
+  </style>
+</head>
+<body>
+  <div id="gameContainer">
+    <div id="titleScreen">
+      <h1>Comical Adventure</h1>
+      <p>Welcome to a bizarre quest full of surprises. Collect items, watch the world change, and try not to burst out laughing.</p>
+      <p>Press the button to start your journey!</p>
+      <button id="startBtn">Enter the Madness</button>
+    </div>
+
+    <div id="hud">
+      <div id="timerDisplay">Time: <span>0</span> sec</div>
+      <div id="scoreDisplay">Score: <span>0</span></div>
+      <div id="cookiesDisplay">Cookies: <span>0</span></div>
+    </div>
+
+    <div id="player">🍪</div>
+
+    <div id="miniMap">
+      <h3>World Map</h3>
+      <div id="miniMapCanvas"></div>
+    </div>
+  </div>
+
+  <div id="legalNote">
+    Fun purpose only. Excessive cookie collection might cause imaginary sugar rush.
+  </div>
+
+  <script>
+    /* Minimal references, comedic single-file game logic */
+
+    const gameContainer = document.getElementById('gameContainer');
+    const titleScreen = document.getElementById('titleScreen');
+    const startBtn = document.getElementById('startBtn');
+    const hud = document.getElementById('hud');
+    const timerDisplay = document.getElementById('timerDisplay').querySelector('span');
+    const scoreDisplay = document.getElementById('scoreDisplay').querySelector('span');
+    const cookiesDisplay = document.getElementById('cookiesDisplay').querySelector('span');
+    const player = document.getElementById('player');
+    const miniMap = document.getElementById('miniMap');
+    const miniMapCanvas = document.getElementById('miniMapCanvas');
+
+    let timeElapsed = 0;
+    let score = 0;
+    let cookiesCount = 0;
+    let gameRunning = false;
+    let crazyModeActive = false;
+
+    let playerX = 0;
+    let playerY = 0;
+    let speed = 5;
+    let moveUp = false;
+    let moveDown = false;
+    let moveLeft = false;
+    let moveRight = false;
+
+    let cookieSpawnInterval = 2000;
+    let cookieLimit = 25;
+    let currentCookies = 0;
+
+    const playerDot = document.createElement('div');
+    playerDot.style.position = 'absolute';
+    playerDot.style.width = '6px';
+    playerDot.style.height = '6px';
+    playerDot.style.borderRadius = '3px';
+    playerDot.style.background = '#ff5252';
+    miniMapCanvas.appendChild(playerDot);
+
+    startBtn.addEventListener('click', () => {
+      titleScreen.style.display = 'none';
+      hud.style.display = 'flex';
+      player.style.display = 'block';
+      miniMap.style.display = 'block';
+      gameRunning = true;
+      initGame();
+    });
+
+    function initGame() {
+      centerPlayer();
+      startTimer();
+      spawnCookies();
+      document.addEventListener('keydown', keyDown);
+      document.addEventListener('keyup', keyUp);
+    }
+
+    function centerPlayer() {
+      const w = gameContainer.offsetWidth;
+      const h = gameContainer.offsetHeight;
+      playerX = w / 2 - player.offsetWidth / 2;
+      playerY = h / 2 - player.offsetHeight / 2;
+      updatePlayerPos();
+    }
+
+    function startTimer() {
+      const tInt = setInterval(() => {
+        if (!gameRunning) {
+          clearInterval(tInt);
+          return;
+        }
+        timeElapsed++;
+        timerDisplay.textContent = timeElapsed;
+      }, 1000);
+    }
+
+    function spawnCookies() {
+      const spawnInt = setInterval(() => {
+        if (!gameRunning) {
+          clearInterval(spawnInt);
+          return;
+        }
+        if (currentCookies < cookieLimit) {
+          createCookie();
+        }
+      }, cookieSpawnInterval);
+    }
+
+    function createCookie() {
+      currentCookies++;
+      const cookie = document.createElement('div');
+      cookie.classList.add('cookie');
+      cookie.textContent = '🍪';
+
+      const w = gameContainer.offsetWidth;
+      const h = gameContainer.offsetHeight;
+      const x = Math.floor(Math.random() * (w - 40));
+      const y = Math.floor(Math.random() * (h - 40));
+      cookie.style.left = x + 'px';
+      cookie.style.top = y + 'px';
+
+      gameContainer.appendChild(cookie);
+
+      const cInt = setInterval(() => {
+        if (!gameRunning) {
+          clearInterval(cInt);
+          return;
+        }
+        const distX = (playerX + 25) - (x + 20);
+        const distY = (playerY + 25) - (y + 20);
+        const distance = Math.sqrt(distX * distX + distY * distY);
+        if (distance < 40) {
+          pickUpCookie(cookie, cInt);
+        }
+      }, 100);
+
+      cookie.addEventListener('click', () => {
+        pickUpCookie(cookie, cInt);
+      });
+    }
+
+    function pickUpCookie(cookie, interval) {
+      if (cookie.parentNode) {
+        cookie.parentNode.removeChild(cookie);
+      }
+      clearInterval(interval);
+      currentCookies--;
+      cookiesCount++;
+      cookiesDisplay.textContent = cookiesCount;
+      score += 10;
+      scoreDisplay.textContent = score;
+      showMsg("Cookie collected! +10 points");
+      checkCrazyMode();
+    }
+
+    function keyDown(e) {
+      const k = e.key.toLowerCase();
+      if (k === 'arrowup' || k === 'w') moveUp = true;
+      if (k === 'arrowdown' || k === 's') moveDown = true;
+      if (k === 'arrowleft' || k === 'a') moveLeft = true;
+      if (k === 'arrowright' || k === 'd') moveRight = true;
+    }
+
+    function keyUp(e) {
+      const k = e.key.toLowerCase();
+      if (k === 'arrowup' || k === 'w') moveUp = false;
+      if (k === 'arrowdown' || k === 's') moveDown = false;
+      if (k === 'arrowleft' || k === 'a') moveLeft = false;
+      if (k === 'arrowright' || k === 'd') moveRight = false;
+    }
+
+    setInterval(() => {
+      if (!gameRunning) return;
+      let nx = playerX;
+      let ny = playerY;
+      if (moveUp) ny -= speed;
+      if (moveDown) ny += speed;
+      if (moveLeft) nx -= speed;
+      if (moveRight) nx += speed;
+      const w = gameContainer.offsetWidth;
+      const h = gameContainer.offsetHeight;
+      if (nx < 0) nx = 0;
+      if (ny < 0) ny = 0;
+      if (nx + player.offsetWidth > w) nx = w - player.offsetWidth;
+      if (ny + player.offsetHeight > h) ny = h - player.offsetHeight;
+      playerX = nx;
+      playerY = ny;
+      updatePlayerPos();
+    }, 50);
+
+    function updatePlayerPos() {
+      player.style.left = playerX + 'px';
+      player.style.top = playerY + 'px';
+      const rx = (miniMapCanvas.offsetWidth - 6) / gameContainer.offsetWidth;
+      const ry = (miniMapCanvas.offsetHeight - 6) / gameContainer.offsetHeight;
+      playerDot.style.left = (playerX * rx) + 'px';
+      playerDot.style.top = (playerY * ry) + 'px';
+    }
+
+    function showMsg(text) {
+      const msg = document.createElement('div');
+      msg.classList.add('message');
+      msg.textContent = text;
+      const offsetX = Math.random() * 60 - 30;
+      const offsetY = Math.random() * 60 - 30;
+      msg.style.left = (playerX + offsetX) + 'px';
+      msg.style.top = (playerY + offsetY) + 'px';
+      gameContainer.appendChild(msg);
+      setTimeout(() => {
+        if (msg.parentNode) {
+          msg.parentNode.removeChild(msg);
+        }
+      }, 3000);
+    }
+
+    function checkCrazyMode() {
+      if (!crazyModeActive && (score >= 50 || cookiesCount >= 5)) {
+        crazyModeActive = true;
+        activateCrazyMode();
+      }
+    }
+
+    function activateCrazyMode() {
+      document.body.classList.add('crazyMode');
+      showMsg("Crazy mode engaged!");
+    }
+  </script>
+</body>
+</html>
