@@ -1,7 +1,5 @@
 # Cookies Cookie Eater
 
-![Cookies Cookie Eater Banner](https://via.placeholder.com/800x200?text=Cookies+Cookie+Eater)
-
 **Cookies Cookie Eater** is a whimsical, browser-based game that invites players on a hilarious quest filled with surprises. Navigate through a vibrant world, collect delightful cookies, and watch as the environment transforms in unexpected ways. Perfect for a quick laugh and some light-hearted fun!
 
 ## Table of Contents
@@ -22,6 +20,12 @@
 - **Interactive Elements:** Clickable cookies and dynamic messages enhance the interactive experience.
 - **Responsive Design:** Play seamlessly on various screen sizes and devices.
 - **Comical Aesthetics:** Enjoy a fun and quirky visual style with Comic Sans and vibrant colors.
+- **Enemies:** Avoid pesky enemies that roam the game area. Colliding with them ends your game!
+- **Power-ups:** Collect power-ups to gain temporary abilities like speed boosts or invincibility.
+- **Pause Menu:** Pause your adventure at any time, with options to resume, restart, or quit the game.
+- **Particle Effects:** Experience delightful visual effects when collecting cookies.
+- **Audio Enhancements:** Immerse yourself with background music and sound effects for various actions.
+- **Level Progression:** Advance through levels that increase in difficulty, introducing more challenges and enemies.
 
 ## How to Play
 
@@ -30,23 +34,42 @@
    - Click on the **"Enter the Madness"** button on the title screen to begin your adventure.
 
 2. **Control Your Player:**
-   - Use the arrow keys or `W`, `A`, `S`, `D` to move your cookie avatar around the screen.
-   - Navigate through the game world to find and collect cookies.
+   - Use the arrow keys or W, A, S, D to move your cookie avatar around the screen.
+   - On mobile devices, use touch controls to navigate your avatar.
 
 3. **Collect Cookies:**
    - Click on the 🍪 icons scattered around the screen or move your avatar close to them to collect.
    - Each collected cookie adds to your score and total cookie count.
+   - Watch for particle effects that celebrate your collection!
 
-4. **Monitor Your Progress:**
+4. **Avoid Enemies:**
+   - Steer clear of 👾 enemies roaming the game area.
+   - Colliding with an enemy ends the game, so stay alert!
+
+5. **Use Power-ups:**
+   - Look out for ⭐ power-ups that appear periodically.
+   - Collect power-ups to gain temporary abilities:
+     - **Speed Boost:** Move faster to collect more cookies.
+     - **Invincibility:** Temporarily avoid enemy collisions.
+
+6. **Monitor Your Progress:**
    - Keep an eye on the HUD at the top to track your time, score, and the number of cookies you've collected.
    - Use the mini map at the bottom-right corner to see your position in the game world.
 
-5. **Activate Crazy Mode:**
-   - Reach a score of 50 points or collect 5 cookies to activate **Crazy Mode**.
+7. **Activate Crazy Mode:**
+   - Reach a score of 100 points or collect 10 cookies to activate **Crazy Mode**.
    - Enjoy the colorful animations and enhanced visuals as your adventure becomes even more whimsical!
 
-6. **Have Fun:**
-   - Enjoy the playful animations, messages, and the overall comical experience.
+8. **Pause the Game:**
+   - Press the **'P'** key to pause the game at any time.
+   - Use the pause menu to resume, restart, or quit your adventure.
+
+9. **Level Up:**
+   - Progress through levels that increase in difficulty every 30 seconds.
+   - With each level up, experience faster speeds, more enemies, and increased cookie spawn rates.
+
+10. **Have Fun:**
+    - Enjoy the playful animations, messages, and the overall comical experience.
 
 ## Getting Started
 
@@ -71,8 +94,9 @@ To get started with **Cookies Cookie Eater**, follow these simple steps:
 
 ## Credits
 
-- **Icons:** Emoji representations used for player and cookies.
+- **Icons:** Emoji representations used for player, cookies, enemies, and power-ups.
 - **Fonts:** Comic Sans MS for a playful and comical aesthetic.
+- **Audio:** Background music and sound effects sourced from [Bensound](https://www.bensound.com/) and [SoundJay](https://www.soundjay.com/).
 - **Inspiration:** Inspired by classic browser games and a love for humor in gaming.
 
 ## License

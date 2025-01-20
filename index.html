@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <title>Comical Adventure</title>
   <style>
-
     * {
       margin: 0;
       padding: 0;
@@ -12,7 +12,8 @@
       font-family: "Comic Sans MS", "Comic Sans", cursive;
     }
 
-    html, body {
+    html,
+    body {
       width: 100%;
       height: 100%;
       background: linear-gradient(135deg, #ff9a9e, #fad0c4);
@@ -27,7 +28,7 @@
 
     #titleScreen {
       position: absolute;
-      top: 15%;
+      top: 10%;
       left: 50%;
       transform: translateX(-50%);
       text-align: center;
@@ -39,7 +40,7 @@
     }
 
     #titleScreen h1 {
-      font-size: 2.5rem;
+      font-size: 3rem;
       margin-bottom: 1rem;
     }
 
@@ -58,6 +59,7 @@
       cursor: pointer;
       border-radius: 8px;
       transition: transform 0.2s ease;
+      margin: 0.5rem;
     }
 
     #titleScreen button:hover {
@@ -105,7 +107,9 @@
       transition: transform 0.1s linear;
     }
 
-    .cookie {
+    .cookie,
+    .enemy,
+    .powerup {
       position: absolute;
       width: 40px;
       height: 40px;
@@ -121,9 +125,40 @@
       animation: bob 2s infinite alternate ease-in-out;
     }
 
+    .enemy {
+      background: #90a4ae;
+      border-color: #607d8b;
+      animation: moveEnemy 4s infinite linear;
+    }
+
+    .powerup {
+      background: #a5d6a7;
+      border-color: #66bb6a;
+      animation: bob 1.5s infinite alternate ease-in-out;
+    }
+
     @keyframes bob {
-      0% { transform: translateY(0); }
-      100% { transform: translateY(-20px); }
+      0% {
+        transform: translateY(0);
+      }
+
+      100% {
+        transform: translateY(-20px);
+      }
+    }
+
+    @keyframes moveEnemy {
+      0% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(20px);
+      }
+
+      100% {
+        transform: translateY(0);
+      }
     }
 
     .message {
@@ -141,17 +176,25 @@
     }
 
     @keyframes vanish {
-      0% { opacity: 1; }
-      80% { opacity: 1; }
-      100% { opacity: 0; }
+      0% {
+        opacity: 1;
+      }
+
+      80% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0;
+      }
     }
 
     #miniMap {
       position: absolute;
       bottom: 1rem;
       right: 1rem;
-      width: 150px;
-      height: 150px;
+      width: 200px;
+      height: 200px;
       background: rgba(255, 255, 255, 0.7);
       border: 2px solid #333;
       z-index: 700;
@@ -180,11 +223,25 @@
     }
 
     @keyframes colorCycler {
-      0% { background: linear-gradient(135deg, #ff9a9e, #fad0c4); }
-      25% { background: linear-gradient(135deg, #6a11cb, #2575fc); }
-      50% { background: linear-gradient(135deg, #00c6fb, #005bea); }
-      75% { background: linear-gradient(135deg, #fffcdc, #d9a7c7); }
-      100% { background: linear-gradient(135deg, #fbc2eb, #a6c1ee); }
+      0% {
+        background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      }
+
+      25% {
+        background: linear-gradient(135deg, #6a11cb, #2575fc);
+      }
+
+      50% {
+        background: linear-gradient(135deg, #00c6fb, #005bea);
+      }
+
+      75% {
+        background: linear-gradient(135deg, #fffcdc, #d9a7c7);
+      }
+
+      100% {
+        background: linear-gradient(135deg, #fbc2eb, #a6c1ee);
+      }
     }
 
     #legalNote {
@@ -193,15 +250,71 @@
       left: 50%;
       transform: translateX(-50%);
       width: 100%;
-      background: rgba(0,0,0,0.4);
+      background: rgba(0, 0, 0, 0.4);
       color: #fff;
       padding: 0.5rem;
       text-align: center;
       font-size: 0.9rem;
       z-index: 999;
     }
+
+    /* Styles for Pause Menu */
+    #pauseMenu {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+      text-align: center;
+      display: none;
+      z-index: 1001;
+    }
+
+    #pauseMenu button {
+      background-color: #ff5252;
+      color: #fff;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      cursor: pointer;
+      border-radius: 5px;
+      margin: 0.5rem;
+      transition: transform 0.2s ease;
+    }
+
+    #pauseMenu button:hover {
+      transform: scale(1.05);
+      background-color: #c70039;
+    }
+
+    /* Particle Effects */
+    .particle {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      background: #ffeb3b;
+      border-radius: 50%;
+      opacity: 0;
+      animation: sparkle 1s forwards;
+    }
+
+    @keyframes sparkle {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      100% {
+        transform: scale(2);
+        opacity: 0;
+      }
+    }
   </style>
 </head>
+
 <body>
   <div id="gameContainer">
     <div id="titleScreen">
@@ -215,6 +328,7 @@
       <div id="timerDisplay">Time: <span>0</span> sec</div>
       <div id="scoreDisplay">Score: <span>0</span></div>
       <div id="cookiesDisplay">Cookies: <span>0</span></div>
+      <div id="levelDisplay">Level: <span>1</span></div>
     </div>
 
     <div id="player">🍪</div>
@@ -223,14 +337,35 @@
       <h3>World Map</h3>
       <div id="miniMapCanvas"></div>
     </div>
+
+    <div id="pauseMenu">
+      <h2>Game Paused</h2>
+      <button id="resumeBtn">Resume</button>
+      <button id="restartBtn">Restart</button>
+      <button id="quitBtn">Quit</button>
+    </div>
   </div>
 
   <div id="legalNote">
     Fun purpose only. Excessive cookie collection might cause imaginary sugar rush.
   </div>
 
+  <!-- Audio Elements -->
+  <audio id="bgMusic" loop>
+    <source src="https://www.bensound.com/bensound-music/bensound-ukulele.mp3" type="audio/mpeg">
+  </audio>
+  <audio id="collectSound">
+    <source src="https://www.soundjay.com/buttons/sounds/button-16.mp3" type="audio/mpeg">
+  </audio>
+  <audio id="powerupSound">
+    <source src="https://www.soundjay.com/buttons/sounds/button-09.mp3" type="audio/mpeg">
+  </audio>
+  <audio id="collisionSound">
+    <source src="https://www.soundjay.com/buttons/sounds/button-10.mp3" type="audio/mpeg">
+  </audio>
+
   <script>
-    /* Minimal references, comedic single-file game logic */
+    /* Enhanced Game Logic with Additional Features */
 
     const gameContainer = document.getElementById('gameContainer');
     const titleScreen = document.getElementById('titleScreen');
@@ -239,9 +374,19 @@
     const timerDisplay = document.getElementById('timerDisplay').querySelector('span');
     const scoreDisplay = document.getElementById('scoreDisplay').querySelector('span');
     const cookiesDisplay = document.getElementById('cookiesDisplay').querySelector('span');
+    const levelDisplay = document.getElementById('levelDisplay').querySelector('span');
     const player = document.getElementById('player');
     const miniMap = document.getElementById('miniMap');
     const miniMapCanvas = document.getElementById('miniMapCanvas');
+    const pauseMenu = document.getElementById('pauseMenu');
+    const resumeBtn = document.getElementById('resumeBtn');
+    const restartBtn = document.getElementById('restartBtn');
+    const quitBtn = document.getElementById('quitBtn');
+
+    const bgMusic = document.getElementById('bgMusic');
+    const collectSound = document.getElementById('collectSound');
+    const powerupSound = document.getElementById('powerupSound');
+    const collisionSound = document.getElementById('collisionSound');
 
     let timeElapsed = 0;
     let score = 0;
@@ -260,6 +405,10 @@
     let cookieSpawnInterval = 2000;
     let cookieLimit = 25;
     let currentCookies = 0;
+    let level = 1;
+
+    let powerups = [];
+    let enemies = [];
 
     const playerDot = document.createElement('div');
     playerDot.style.position = 'absolute';
@@ -269,6 +418,7 @@
     playerDot.style.background = '#ff5252';
     miniMapCanvas.appendChild(playerDot);
 
+    // Event Listeners
     startBtn.addEventListener('click', () => {
       titleScreen.style.display = 'none';
       hud.style.display = 'flex';
@@ -276,14 +426,91 @@
       miniMap.style.display = 'block';
       gameRunning = true;
       initGame();
+      bgMusic.play();
     });
+
+    resumeBtn.addEventListener('click', () => {
+      pauseMenu.style.display = 'none';
+      gameRunning = true;
+      bgMusic.play();
+    });
+
+    restartBtn.addEventListener('click', () => {
+      resetGame();
+    });
+
+    quitBtn.addEventListener('click', () => {
+      location.reload();
+    });
+
+    // Pause functionality
+    document.addEventListener('keydown', (e) => {
+      if (e.key.toLowerCase() === 'p') {
+        togglePause();
+      }
+    });
+
+    function togglePause() {
+      if (gameRunning) {
+        gameRunning = false;
+        pauseMenu.style.display = 'block';
+        bgMusic.pause();
+      } else {
+        gameRunning = true;
+        pauseMenu.style.display = 'none';
+        bgMusic.play();
+      }
+    }
 
     function initGame() {
       centerPlayer();
       startTimer();
       spawnCookies();
+      spawnEnemies();
+      spawnPowerups();
       document.addEventListener('keydown', keyDown);
       document.addEventListener('keyup', keyUp);
+      requestAnimationFrame(gameLoop);
+    }
+
+    function resetGame() {
+      // Reset all game variables
+      timeElapsed = 0;
+      score = 0;
+      cookiesCount = 0;
+      level = 1;
+      speed = 5;
+      cookieSpawnInterval = 2000;
+      cookieLimit = 25;
+      currentCookies = 0;
+      crazyModeActive = false;
+
+      // Update HUD
+      timerDisplay.textContent = timeElapsed;
+      scoreDisplay.textContent = score;
+      cookiesDisplay.textContent = cookiesCount;
+      levelDisplay.textContent = level;
+
+      // Remove existing cookies, enemies, powerups
+      document.querySelectorAll('.cookie, .enemy, .powerup').forEach(el => el.remove());
+      enemies = [];
+      powerups = [];
+
+      // Reset player position
+      centerPlayer();
+
+      pauseMenu.style.display = 'none';
+
+      gameRunning = true;
+      bgMusic.currentTime = 0;
+      bgMusic.play();
+
+      // Start game elements
+      startTimer();
+      spawnCookies();
+      spawnEnemies();
+      spawnPowerups();
+      requestAnimationFrame(gameLoop);
     }
 
     function centerPlayer() {
@@ -302,7 +529,26 @@
         }
         timeElapsed++;
         timerDisplay.textContent = timeElapsed;
+        // Level progression every 30 seconds
+        if (timeElapsed % 30 === 0) {
+          levelUp();
+        }
       }, 1000);
+    }
+
+    function levelUp() {
+      level++;
+      levelDisplay.textContent = level;
+      // Increase speed and spawn rate
+      speed += 1;
+      if (cookieSpawnInterval > 500) {
+        cookieSpawnInterval -= 200;
+      }
+      // Increase cookie limit
+      cookieLimit += 5;
+      // Spawn more enemies
+      spawnEnemies(2);
+      showMsg("Level Up! Speed increased.");
     }
 
     function spawnCookies() {
@@ -360,8 +606,151 @@
       cookiesDisplay.textContent = cookiesCount;
       score += 10;
       scoreDisplay.textContent = score;
+      collectSound.play();
       showMsg("Cookie collected! +10 points");
+      createParticles(playerX, playerY);
       checkCrazyMode();
+    }
+
+    function spawnEnemies(number = 1) {
+      for (let i = 0; i < number; i++) {
+        const enemy = document.createElement('div');
+        enemy.classList.add('enemy');
+        enemy.textContent = '👾';
+
+        const w = gameContainer.offsetWidth;
+        const h = gameContainer.offsetHeight;
+        const x = Math.floor(Math.random() * (w - 40));
+        const y = Math.floor(Math.random() * (h - 40));
+        enemy.style.left = x + 'px';
+        enemy.style.top = y + 'px';
+
+        gameContainer.appendChild(enemy);
+        enemies.push(enemy);
+
+        // Enemy movement logic
+        enemy.directionX = Math.random() < 0.5 ? 1 : -1;
+        enemy.directionY = Math.random() < 0.5 ? 1 : -1;
+        enemy.speed = 2 + Math.random() * 2;
+
+        const moveEnemy = () => {
+          if (!gameRunning) return;
+          let ex = parseInt(enemy.style.left);
+          let ey = parseInt(enemy.style.top);
+          ex += enemy.directionX * enemy.speed;
+          ey += enemy.directionY * enemy.speed;
+
+          // Bounce off walls
+          if (ex <= 0 || ex + enemy.offsetWidth >= gameContainer.offsetWidth) {
+            enemy.directionX *= -1;
+          }
+          if (ey <= 0 || ey + enemy.offsetHeight >= gameContainer.offsetHeight) {
+            enemy.directionY *= -1;
+          }
+
+          enemy.style.left = ex + 'px';
+          enemy.style.top = ey + 'px';
+
+          // Collision with player
+          const distX = (playerX + 25) - (ex + 20);
+          const distY = (playerY + 25) - (ey + 20);
+          const distance = Math.sqrt(distX * distX + distY * distY);
+          if (distance < 40 && !invincible) {
+            handleCollision();
+          }
+
+          requestAnimationFrame(moveEnemy);
+        };
+        requestAnimationFrame(moveEnemy);
+      }
+    }
+
+    function spawnPowerups() {
+      const spawnInt = setInterval(() => {
+        if (!gameRunning) {
+          clearInterval(spawnInt);
+          return;
+        }
+        createPowerup();
+      }, 15000); // Spawn a power-up every 15 seconds
+    }
+
+    function createPowerup() {
+      const powerup = document.createElement('div');
+      powerup.classList.add('powerup');
+      powerup.textContent = '⭐';
+
+      const w = gameContainer.offsetWidth;
+      const h = gameContainer.offsetHeight;
+      const x = Math.floor(Math.random() * (w - 40));
+      const y = Math.floor(Math.random() * (h - 40));
+      powerup.style.left = x + 'px';
+      powerup.style.top = y + 'px';
+
+      gameContainer.appendChild(powerup);
+      powerups.push(powerup);
+
+      powerup.addEventListener('click', () => {
+        activatePowerup(powerup);
+      });
+
+      // Auto-remove powerup after 10 seconds if not collected
+      setTimeout(() => {
+        if (powerup.parentNode) {
+          powerup.parentNode.removeChild(powerup);
+          powerups = powerups.filter(p => p !== powerup);
+        }
+      }, 10000);
+    }
+
+    let invincible = false;
+    let speedBoost = false;
+
+    function activatePowerup(powerup) {
+      if (powerup.parentNode) {
+        powerup.parentNode.removeChild(powerup);
+      }
+      powerups = powerups.filter(p => p !== powerup);
+      powerupSound.play();
+      showMsg("Power-up Activated!");
+
+      // Randomly choose a power-up
+      const type = Math.random() < 0.5 ? 'speed' : 'invincible';
+      if (type === 'speed') {
+        speedBoost = true;
+        speed += 3;
+        showMsg("Speed Boost! 🚀");
+        setTimeout(() => {
+          speed -= 3;
+          speedBoost = false;
+          showMsg("Speed Boost Ended.");
+        }, 10000);
+      } else {
+        invincible = true;
+        player.style.borderColor = '#ffd700';
+        showMsg("Invincibility! 💪");
+        setTimeout(() => {
+          invincible = false;
+          player.style.borderColor = '#ff5252';
+          showMsg("Invincibility Ended.");
+        }, 10000);
+      }
+    }
+
+    function handleCollision() {
+      collisionSound.play();
+      endGame();
+    }
+
+    function endGame() {
+      gameRunning = false;
+      bgMusic.pause();
+      showMsg("Game Over! 😢");
+      // Show restart option
+      setTimeout(() => {
+        alert("Game Over! Your score: " + score);
+        resetGame();
+      }, 1000);
     }
 
     function keyDown(e) {
@@ -380,24 +769,49 @@
       if (k === 'arrowright' || k === 'd') moveRight = false;
     }
 
-    setInterval(() => {
-      if (!gameRunning) return;
-      let nx = playerX;
-      let ny = playerY;
-      if (moveUp) ny -= speed;
-      if (moveDown) ny += speed;
-      if (moveLeft) nx -= speed;
-      if (moveRight) nx += speed;
+    // Touch Controls for Mobile
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    gameContainer.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 1) {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+      }
+    });
+
+    gameContainer.addEventListener('touchmove', (e) => {
+      if (e.touches.length === 1) {
+        const touchX = e.touches[0].clientX;
+        const touchY = e.touches[0].clientY;
+        const deltaX = touchX - touchStartX;
+        const deltaY = touchY - touchStartY;
+        playerX += deltaX * 0.5;
+        playerY += deltaY * 0.5;
+        touchStartX = touchX;
+        touchStartY = touchY;
+        constrainPlayer();
+        updatePlayerPos();
+      }
+    });
+
+    function constrainPlayer() {
       const w = gameContainer.offsetWidth;
       const h = gameContainer.offsetHeight;
-      if (nx < 0) nx = 0;
-      if (ny < 0) ny = 0;
-      if (nx + player.offsetWidth > w) nx = w - player.offsetWidth;
-      if (ny + player.offsetHeight > h) ny = h - player.offsetHeight;
-      playerX = nx;
-      playerY = ny;
-      updatePlayerPos();
-    }, 50);
+      if (playerX < 0) playerX = 0;
+      if (playerY < 0) playerY = 0;
+      if (playerX + player.offsetWidth > w) playerX = w - player.offsetWidth;
+      if (playerY + player.offsetHeight > h) playerY = h - player.offsetHeight;
+    }
+
+    // Game Loop for Animations and Collision Checks
+    function gameLoop() {
+      if (gameRunning) {
+        updatePlayerPos();
+        checkCollisions();
+        requestAnimationFrame(gameLoop);
+      }
+    }
 
     function updatePlayerPos() {
       player.style.left = playerX + 'px';
@@ -406,6 +820,32 @@
       const ry = (miniMapCanvas.offsetHeight - 6) / gameContainer.offsetHeight;
       playerDot.style.left = (playerX * rx) + 'px';
       playerDot.style.top = (playerY * ry) + 'px';
+    }
+
+    function checkCollisions() {
+      // Check collisions with enemies
+      enemies.forEach(enemy => {
+        const ex = parseInt(enemy.style.left);
+        const ey = parseInt(enemy.style.top);
+        const distX = (playerX + 25) - (ex + 20);
+        const distY = (playerY + 25) - (ey + 20);
+        const distance = Math.sqrt(distX * distX + distY * distY);
+        if (distance < 40 && !invincible) {
+          handleCollision();
+        }
+      });
+
+      // Check collisions with powerups (if not clicked)
+      powerups.forEach(powerup => {
+        const px = parseInt(powerup.style.left);
+        const py = parseInt(powerup.style.top);
+        const distX = (playerX + 25) - (px + 20);
+        const distY = (playerY + 25) - (py + 20);
+        const distance = Math.sqrt(distX * distX + distY * distY);
+        if (distance < 40) {
+          activatePowerup(powerup);
+        }
+      });
     }
 
     function showMsg(text) {
@@ -425,7 +865,7 @@
     }
 
     function checkCrazyMode() {
-      if (!crazyModeActive && (score >= 50 || cookiesCount >= 5)) {
+      if (!crazyModeActive && (score >= 100 || cookiesCount >= 10)) {
         crazyModeActive = true;
         activateCrazyMode();
       }
@@ -434,7 +874,40 @@
     function activateCrazyMode() {
       document.body.classList.add('crazyMode');
       showMsg("Crazy mode engaged!");
+      // Maybe add more effects or challenges
     }
+
+    function createParticles(x, y, color = '#ffeb3b') {
+      for (let i = 0; i < 10; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        particle.style.left = x + 25 + 'px';
+        particle.style.top = y + 25 + 'px';
+        particle.style.background = color;
+        gameContainer.appendChild(particle);
+        setTimeout(() => {
+          if (particle.parentNode) {
+            particle.parentNode.removeChild(particle);
+          }
+        }, 1000);
+      }
+    }
+
+    // Movement Logic
+    setInterval(() => {
+      if (!gameRunning) return;
+      let nx = playerX;
+      let ny = playerY;
+      if (moveUp) ny -= speed;
+      if (moveDown) ny += speed;
+      if (moveLeft) nx -= speed;
+      if (moveRight) nx += speed;
+      playerX = nx;
+      playerY = ny;
+      constrainPlayer();
+      updatePlayerPos();
+    }, 50);
   </script>
 </body>
+
 </html>
